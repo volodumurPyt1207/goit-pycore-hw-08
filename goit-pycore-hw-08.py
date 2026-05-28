@@ -11,21 +11,12 @@
     close / exit                       — зберегти і завершити роботу
 """
 
+
 import pickle
-
-def save_data(book, filename="addressbook.pkl"):
-    with open(filename, "wb") as f:
-        pickle.dump(book, f)
-
-def load_data(filename="addressbook.pkl"):
-    try:
-        with open(filename, "rb") as f:
-            return pickle.load(f)
-    except FileNotFoundError:
-        return AddressBook() 
-
 from collections import UserDict
 from datetime import datetime, timedelta
+
+
 
 class Field:
     def __init__(self, value):
@@ -58,6 +49,7 @@ class Birthday(Field):
 
     def __str__(self):
         return self.value.strftime("%d.%m.%Y")
+
 
 
 class Record:
@@ -130,6 +122,8 @@ class AddressBook(UserDict):
                 })
         return upcoming
 
+
+
 def input_error(func):
     def inner(*args, **kwargs):
         try:
@@ -142,12 +136,15 @@ def input_error(func):
             return "Enter the argument for the command."
     return inner
 
+
+
 def parse_input(user_input):
     parts = user_input.strip().split()
     if not parts:
         return "", []
     cmd, *args = parts
     return cmd.lower(), args
+
 
 @input_error
 def add_contact(args, book):
@@ -227,6 +224,22 @@ def birthdays(book):
         return "No birthdays in the next 7 days."
     return "\n".join(f"{e['name']}: {e['congratulation_date']}" for e in upcoming)
 
+
+
+def save_data(book, filename="addressbook.pkl"):
+    with open(filename, "wb") as f:
+        pickle.dump(book, f)
+
+
+def load_data(filename="addressbook.pkl"):
+    try:
+        with open(filename, "rb") as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return AddressBook()
+
+
+
 def main():
     book = load_data()
 
@@ -270,7 +283,7 @@ def main():
         else:
             print("Invalid command.")
 
-    save_data(book)  
+    save_data(book)
 
 
 if __name__ == "__main__":
